@@ -27,6 +27,19 @@ router.get('/:id', async (req, res) => {
   }
 })
 
+router.get('/:limit?/:sortBy?/:sortDir?', async (req, res) => {
+  const limit = req.params.limit || 10;
+  const sortBy = req.params.sortBy || 'name';
+  const sortDir = req.params.sortDir || 'asc';
+
+  try {
+    const accounts = await db('accounts').orderBy(sortBy, sortDir).limit(limit);
+    res.status(200).json(accounts);
+  } catch ({message}) {
+    res.status(500).json(message);
+  }
+})
+
 router.post('/', async (req, res) => {
   const newPost = req.body;
 
